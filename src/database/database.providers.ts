@@ -12,8 +12,9 @@ export const databaseProviders = [
         password: process.env.POSTGRES_DB_PASS,
         database: process.env.POSTGRES_DB_DB,
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-        synchronize:
-          process.env.NODE_ENVIRONMENT === 'production' ? false : true,
+        migrations: [__dirname + './migrations/{.ts,.js}'],
+        migrationsRun: true,
+        synchronize: false,
       });
 
       return dataSource.initialize();
