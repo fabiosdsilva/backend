@@ -33,15 +33,14 @@ export class UserService {
       cpf: createUserDto.cpf,
       phone: createUserDto.phone,
       password: passwordHashed,
+      typeUser: createUserDto.typeUser | 0,
     });
 
     return {
       ...createUserDto,
-      id: (await save).id,
-      typeUser: 1,
+      id: save.id,
+      typeUser: save.typeUser,
       password: undefined,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     };
   }
 }
