@@ -2,6 +2,7 @@ version: '3.8'
 
 volumes:
   postgres_data:
+  redis_data:
 
 services:
 
@@ -20,3 +21,27 @@ services:
       interval: 3s
       timeout: 3s
       retries: 3
+
+  redis:
+    image: redislabs/redismod
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  keycloak:
+      image: quay.io/keycloak/keycloak:legacy
+      environment:
+        DB_VENDOR: POSTGRES
+        DB_ADDR: postgres
+        DB_DATABASE: ${DB_DATABASE}
+        DB_USER: ${DB_USER}
+        DB_SCHEMA: public
+        DB_PASSWORD: ${DB_PASSWORD}
+        KEYCLOAK_USER: ${KEYCLOAK_ADMIN}
+        KEYCLOAK_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      ports:
+        - 8080:8080
+      depends_on:
+        - postgres
